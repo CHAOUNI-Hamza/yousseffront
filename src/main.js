@@ -1,6 +1,16 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
 
-createApp(App).use(store).use(router).mount('#app')
+import store from "./store";
+require("@/store/subscriber");
+
+import axios from "axios";
+axios.defaults.baseURL = "http://127.0.0.1:8000/api/v1/";
+
+store.dispatch("auth/attempt", localStorage.getItem("token")).then(() => {
+  const app = createApp(App);
+  app.use(store);
+  app.use(router);
+  app.mount("#app");
+});
